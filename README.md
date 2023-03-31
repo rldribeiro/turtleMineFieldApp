@@ -69,9 +69,11 @@ Example:
 
 `mmm rrr mm r m rrr mm`
 
+This would be interpreted as "MOVE 3 TIMES, ROTATE 3 TIMES, MOVE 2 TIMES, ROTATE 2 TIMES, MOVE 1 TIME, ROTATE 1 TIME"
+
 ## Limitations
 
-The Mine Field size has no limit, but only renders to the terminal up to should have a maximum of 100x100.
+The Mine Field size has no limit, but only renders to the terminal if is smaller than 100x100.
 The exit coordinates, mine coordinates and turtle coordinates must be valid (inside the field).
 Negative mine numbers are considered zero.
 More mines than the size of the field simply fill the field.
