@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using TurtleMineField.App.Configuration;
 using TurtleMineField.Core.Entities;
+using TurtleMineField.Core.Exceptions;
 using TurtleMineField.Core.Factories;
 
 namespace TurtleMineField.UnitTests;
@@ -72,5 +73,43 @@ public class MineFieldFactoryTests
 
         mineField.Cells.OfType<Cell>().Count(mineFieldCell => mineFieldCell.Type == CellType.Mine)
             .Should().Be(2);
+    }
+
+    [TestMethod]
+    public void WhenSizeIsUnderLimitShouldThrowException()
+    {
+        var settings = new GameSettings
+        {
+            FieldHeight = -1,
+            FieldWidth = -1,
+            RandomMines = true,
+            NumberOfMines = 1,
+            ExitCoordinate = new Coordinate(4, 4)
+        };
+
+        var sut = new MineFieldFactory();
+
+        sut.Invoking(y => y.Create(settings))
+            .Should().Throw<InvalidMineFieldException>()
+            .WithMessage("A field with dimensions valued zero or less is not possible.");
+    }
+
+    [TestMethod]
+    public void WhenSizeIsAboveLimitShouldThrowException()
+    {
+        var settings = new GameSettings
+        {
+            FieldHeight = 1001,
+            FieldWidth = 1001,
+            RandomMines = true,
+            NumberOfMines = 1,
+            ExitCoordinate = new Coordinate(4, 4)
+        };
+
+        var sut = new MineFieldFactory();
+
+        sut.Invoking(y => y.Create(settings))
+            .Should().Throw<InvalidMineFieldException>()
+            .WithMessage("A field has a size limit of 1000 x 1000");
     }
 }

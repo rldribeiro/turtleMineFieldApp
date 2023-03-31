@@ -11,6 +11,9 @@ internal sealed class MineField : IMineField
         if (width <= 0 || height <= 0)
             throw new InvalidMineFieldException("A field with dimensions valued zero or less is not possible.");
 
+        if (width > 1000 || height > 1000)
+            throw new InvalidMineFieldException("A field has a size limit of 1000 x 1000");
+
         _exitCoordinate = exitCoordinate;
         Cells = new Cell[width, height];
         Width = width;
