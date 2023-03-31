@@ -8,6 +8,9 @@ internal sealed class MineField : IMineField
 
     public MineField(int width, int height, Coordinate exitCoordinate)
     {
+        if (width <= 0 || height <= 0)
+            throw new InvalidMineFieldException("A field with dimensions valued zero or less is not possible.");
+
         _exitCoordinate = exitCoordinate;
         Cells = new Cell[width, height];
         Width = width;
@@ -58,7 +61,7 @@ internal sealed class MineField : IMineField
     public Cell VisitCell(Coordinate coordinate)
     {
         if (!IsActive)
-            throw new InactiveMineFieldException("The accessed mine field was not active.");
+            throw new InvalidMineFieldException("The accessed mine field was not active.");
 
         try
         {
