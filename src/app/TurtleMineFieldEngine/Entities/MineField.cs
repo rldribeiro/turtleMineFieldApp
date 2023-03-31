@@ -27,7 +27,13 @@ internal sealed class MineField : IMineField
     public int Height { get; }
     public bool IsActive { get; private set; }
 
-
+    /// <summary>
+    /// Scatters mines through the minefield from a list of coordinates.
+    /// It does not overflows the field.
+    /// It does not override the exit coordinate.
+    /// </summary>
+    /// <param name="mineCoordinates"></param>
+    /// <exception cref="CoordinateOutOfBoundsException"></exception>
     public void ScatterMines(List<Coordinate> mineCoordinates)
     {
         Coordinate currentCoordinate = Coordinate.Origin;

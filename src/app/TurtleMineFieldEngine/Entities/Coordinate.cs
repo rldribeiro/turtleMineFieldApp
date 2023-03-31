@@ -1,6 +1,6 @@
 ﻿namespace TurtleMineField.Core.Entities;
 
-public class Coordinate
+public struct Coordinate
 {
     public Coordinate(int x, int y)
     {

@@ -6,6 +6,14 @@ namespace TurtleMineField.App;
 
 internal static class SettingsParser
 {
+    /// <summary>
+    /// Reads a filepath for a JSON file and parses it to GameSettings class, composed of both
+    /// ITurtleSettings and IMineFieldSettings
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    /// <exception cref="FileNotFoundException"></exception>
+    /// <exception cref="InvalidInputException"></exception>
     public static GameSettings Parse(string filePath)
     {
         if (!File.Exists(filePath))
