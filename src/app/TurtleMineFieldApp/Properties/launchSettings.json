@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "TurtleChallenge": {
+    "TurtleChallenge: Sequence": {
       "commandName": "Project",
       "commandLineArgs": "ExampleSettings\\mine-coordinates-example-settings.json ExampleSettings\\actions-example.txt"
+    },
+    "TurtleChallenge: Interactive": {
+      "commandName": "Project",
+      "commandLineArgs": "ExampleSettings\\mine-coordinates-example-settings.json --interactive"
     }
   }
 }

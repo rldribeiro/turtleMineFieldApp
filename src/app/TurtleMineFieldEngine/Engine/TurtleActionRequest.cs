@@ -17,5 +17,6 @@ public enum ActionType
 {
     None,
     Move,
-    Rotate
+    Rotate,
+    Quit
 }

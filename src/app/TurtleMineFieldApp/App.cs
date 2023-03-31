@@ -10,16 +10,19 @@ internal sealed class App
     private readonly ITurtleMineFieldGameController _turtleMineFieldController;
     private readonly IActionParsingService _parsingService;
     private readonly IMineFieldRenderService _renderService;
+    private readonly IInputReadingService _inputReadingService;
     private readonly bool _renderBoard;
 
     public App(ITurtleMineFieldGameController turtleMineFieldController,
         IActionParsingService parsingService,
         IMineFieldRenderService renderService,
+        IInputReadingService inputReadingService,
         IMineFieldSettings settings)
     {
         _turtleMineFieldController = turtleMineFieldController;
         _parsingService = parsingService;
         _renderService = renderService;
+        _inputReadingService = inputReadingService;
         _renderBoard = settings.FieldWidth <= 100 && settings.FieldHeight <= 100;
     }
 
@@ -29,7 +32,7 @@ internal sealed class App
     /// <param name="actionSequence"></param>
     public void RunSequence(string actionSequence)
     {
-        var actions = _parsingService.ParseTurtleActions(actionSequence);
+        var actions = _parsingService.ParseActions(actionSequence);
         var actionCount = actions.Count;
 
         for (var i = 0; i < actionCount; i++)
@@ -44,6 +47,36 @@ internal sealed class App
 
             if (CheckIfGameEnded(response, sequenceCount, i, actionCount))
                 return;
+        }
+    }
+
+    public void RunInteractive()
+    {
+        var fieldState = _turtleMineFieldController.RunAction(new TurtleActionRequest(ActionType.None, 0));
+        var acceptableInput = new[] { 'r', 'm', 'q' };
+        var count = 0;
+        var gameRunning = true;
+        while (gameRunning)
+        {
+            _renderService.RefreshRender();
+            count++;
+            _renderService.RenderMineField(fieldState.FieldCells, fieldState.Turtle);
+            CheckIfGameEnded(fieldState, count, 0, 99);
+            _renderService.RenderPrompt();
+
+            var actionChar = _inputReadingService.ReadUserInput(acceptableInput);
+            var actionType = _parsingService.ParseActionType(actionChar);
+
+            switch (actionType)
+            {
+                case ActionType.Quit:
+                    gameRunning = false;
+                    break;
+                case ActionType.Rotate:
+                case ActionType.Move:
+                    fieldState = _turtleMineFieldController.RunAction(new TurtleActionRequest(actionType, 1));
+                    break;
+            }
         }
     }
 
@@ -64,7 +97,7 @@ internal sealed class App
         }
 
         // Check end of actions
-        if (i == actionCount - 1)
+        if (i >= actionCount - 1)
         {
             _renderService.RenderLostResult(sequenceCount);
             return true;

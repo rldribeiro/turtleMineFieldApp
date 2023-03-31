@@ -6,7 +6,7 @@ namespace TurtleMineField.App.Services;
 
 internal sealed class ActionParsingService : IActionParsingService
 {
-    public List<TurtleActionRequest> ParseTurtleActions(string actionSequence)
+    public List<TurtleActionRequest> ParseActions(string actionSequence)
     {
         if (string.IsNullOrEmpty(actionSequence))
             throw new InvalidInputException("Action sequence was null or empty");
@@ -26,17 +26,17 @@ internal sealed class ActionParsingService : IActionParsingService
             }
             else
             {
-                actions.Add(new TurtleActionRequest(ParseAction(currentType), currentTurns));
+                actions.Add(new TurtleActionRequest(ParseActionType(currentType), currentTurns));
                 currentType = trimmedSequence[i];
                 currentTurns = 1;
             }
         }
 
-        actions.Add(new TurtleActionRequest(ParseAction(currentType), currentTurns));
+        actions.Add(new TurtleActionRequest(ParseActionType(currentType), currentTurns));
         return actions;
     }
 
-    private ActionType ParseAction(char currentAction)
+    public ActionType ParseActionType(char currentAction)
     {
         switch (currentAction)
         {
@@ -44,6 +44,8 @@ internal sealed class ActionParsingService : IActionParsingService
                 return ActionType.Move;
             case 'r':
                 return ActionType.Rotate;
+            case 'q':
+                return ActionType.Quit;
             default:
                 throw new InvalidInputException($"Found invalid char '{currentAction}' in sequence. Only 'm' and 'r' are valid.");
 

@@ -49,6 +49,28 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         RenderActionResult("KABUMMM!!! Your turtle hit a mine!", ConsoleColor.Red, sequenceCount);
     }
 
+    public void RenderPrompt()
+    {
+        var previousColor = Console.ForegroundColor;
+        Console.WriteLine("------------------------------");
+        Console.WriteLine("Enter a letter for an action:");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.Write("[M]ove ");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("[R]otate ");
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("[Q]uit ");
+
+        Console.ForegroundColor = previousColor;
+        Console.WriteLine();
+        Console.Write(">");
+    }
+
+    public void RefreshRender()
+    {
+        Console.Clear();
+    }
+
     public void RenderSuccessResult(int sequenceCount)
     {
         RenderActionResult("FREEDOM!!! Your turtle found the exit!", ConsoleColor.Cyan, sequenceCount);

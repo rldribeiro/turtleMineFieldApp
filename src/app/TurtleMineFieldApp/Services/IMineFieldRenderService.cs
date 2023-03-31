@@ -13,26 +13,33 @@ public interface IMineFieldRenderService
     void RenderMineField(Cell[,] cells, ITurtle turtle);
 
     /// <summary>
-    /// The rendered message when the turtle ends in an empty cell, but still has actions to perform
+    /// Renders a message when the turtle ends in an empty cell, but still has actions to perform
     /// </summary>
     /// <param name="sequenceCount"></param>
     void RenderMovingResult(int sequenceCount);
 
     /// <summary>
-    /// The rendered message when the turtle ended its movement, but haven't found a mine or the exit
+    /// Renders a message when the turtle ended its movement, but haven't found a mine or the exit
     /// </summary>
     /// <param name="sequenceCount"></param>
     void RenderLostResult(int sequenceCount);
 
     /// <summary>
-    /// The rendered message when the turtle finds the exit
+    /// Renders a message when the turtle finds the exit
     /// </summary>
     /// <param name="sequenceCount"></param>
     void RenderSuccessResult(int sequenceCount);
 
     /// <summary>
-    /// The rendered message when the turtle hits a mine
+    /// Renders a message when the turtle hits a mine
     /// </summary>
     /// <param name="sequenceCount"></param>
     void RenderMineHitResult(int sequenceCount);
+
+    /// <summary>
+    /// Renders a prompt to the player
+    /// </summary>
+    void RenderPrompt();
+
+    void RefreshRender();
 }

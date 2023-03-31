@@ -23,7 +23,7 @@ public class ActionParsingServiceTests
             new(ActionType.Rotate, 1),
         };
 
-        var resultActionList = sut.ParseTurtleActions(sequence);
+        var resultActionList = sut.ParseActions(sequence);
 
         resultActionList.Should().BeEquivalentTo(expectedActionList);
     }
@@ -44,7 +44,7 @@ public class ActionParsingServiceTests
             new(ActionType.Rotate, 1),
         };
 
-        var resultActionList = sut.ParseTurtleActions(sequence);
+        var resultActionList = sut.ParseActions(sequence);
 
         resultActionList.Should().BeEquivalentTo(expectedActionList);
     }
@@ -56,7 +56,7 @@ public class ActionParsingServiceTests
 
         var sequence = "mmm a rrr mm r r m r";
 
-        sut.Invoking(y => y.ParseTurtleActions(sequence))
+        sut.Invoking(y => y.ParseActions(sequence))
             .Should().Throw<InvalidInputException>()
             .WithMessage("Found invalid char 'a' in sequence. Only 'm' and 'r' are valid.");
     }

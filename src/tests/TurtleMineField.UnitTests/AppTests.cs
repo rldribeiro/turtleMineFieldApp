@@ -10,7 +10,7 @@ namespace TurtleMineField.UnitTests;
 public class AppTests
 {
     [TestMethod]
-    public void WhenCallingCreateShouldReturnField()
+    public void WhenRunningSequenceShouldCallDependentServices()
     {
         var controller = Substitute.For<ITurtleMineFieldGameController>();
         var turtle = Substitute.For<ITurtle>();
@@ -36,15 +36,16 @@ public class AppTests
             new(ActionType.Rotate, 1),
         };
         var parsingService = Substitute.For<IActionParsingService>();
-        parsingService.ParseTurtleActions(Arg.Any<string>()).ReturnsForAnyArgs(actionList);
+        parsingService.ParseActions(Arg.Any<string>()).ReturnsForAnyArgs(actionList);
 
+        var readingService = Substitute.For<IInputReadingService>();
         var renderService = Substitute.For<IMineFieldRenderService>();
 
-        var sut = new App.App(controller, parsingService, renderService, settings);
+        var sut = new App.App(controller, parsingService, renderService, readingService, settings);
 
         sut.RunSequence("sequence");
 
-        parsingService.Received(1).ParseTurtleActions(Arg.Any<string>());
+        parsingService.Received(1).ParseActions(Arg.Any<string>());
         controller.Received(6).RunAction(Arg.Any<TurtleActionRequest>());
         renderService.Received(6).RenderMineField(Arg.Any<Cell[,]>(), Arg.Any<ITurtle>());
     }

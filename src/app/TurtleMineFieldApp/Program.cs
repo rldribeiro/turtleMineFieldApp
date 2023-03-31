@@ -16,6 +16,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IMineFieldSettings>(_ => settings);
 
         services.AddSingleton<IMineFieldRenderService, MineFieldRenderInConsoleService>();
+        services.AddSingleton<IInputReadingService, KeyboardInputReadingService>();
         services.AddSingleton<IActionParsingService, ActionParsingService>();
 
         services.RegisterTurtleMineFieldCoreServices();
@@ -24,17 +25,24 @@ using IHost host = Host.CreateDefaultBuilder(args)
 
 try
 {
-    if (args.Length != 2)
+    if (args.Length < 2)
         throw new InvalidInputException("Not enough arguments. Usage:\nTurtleMineFieldApp.exe <path-to-settings-file> <path-to-actions-file>");
 
-    var actionsFilePath = args[1];
-    if (!File.Exists(actionsFilePath))
-        throw new InvalidInputException("Actions file not found");
-
-    var actionSequence = File.ReadAllText(actionsFilePath);
-
     var app = host.Services.GetRequiredService<App>();
-    app.RunSequence(actionSequence);
+
+    if (args.Contains("--interactive"))
+    {
+        app.RunInteractive();
+    }
+    else
+    {
+        var actionsFilePath = args[1];
+        if (!File.Exists(actionsFilePath))
+            throw new InvalidInputException("Actions file not found");
+
+        var actionSequence = File.ReadAllText(actionsFilePath);
+        app.RunSequence(actionSequence);
+    }
 }
 catch (Exception ex)
 {

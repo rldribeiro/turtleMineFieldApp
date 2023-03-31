@@ -12,5 +12,12 @@ public interface IActionParsingService
     /// <param name="actionSequence">A string composed of 'r', 'm' and white spaces.</param>
     /// <returns>An ordered list of Actions</returns>
     /// <exception cref="InvalidInputException"></exception>
-    List<TurtleActionRequest> ParseTurtleActions(string actionSequence);
+    List<TurtleActionRequest> ParseActions(string actionSequence);
+
+    /// <summary>
+    /// Gets an action char and parses into action type
+    /// </summary>
+    /// <param name="currentAction"></param>
+    /// <returns></returns>
+    ActionType ParseActionType(char currentAction);
 }
