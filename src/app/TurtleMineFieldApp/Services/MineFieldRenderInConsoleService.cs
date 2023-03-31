@@ -34,11 +34,39 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         Console.WriteLine();
     }
 
+    public void RenderMovingResult(int sequenceCount)
+    {
+        RenderActionResult("Still moving, still safe...", ConsoleColor.White, sequenceCount);
+    }
+
+    public void RenderLostResult(int sequenceCount)
+    {
+        RenderActionResult("Your turtle is still lost in the field...", ConsoleColor.Yellow, sequenceCount);
+    }
+
+    public void RenderMineHitResult(int sequenceCount)
+    {
+        RenderActionResult("KABUMMM!!! Your turtle hit a mine!", ConsoleColor.Red, sequenceCount);
+    }
+
+    public void RenderSuccessResult(int sequenceCount)
+    {
+        RenderActionResult("FREEDOM!!! Your turtle found the exit!", ConsoleColor.Cyan, sequenceCount);
+    }
+
+    private void RenderActionResult(string message, ConsoleColor color, int sequenceCount)
+    {
+        Console.Write($"Sequence {sequenceCount}:");
+        var previousColor = Console.ForegroundColor;
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ForegroundColor = previousColor;
+    }
+
     private void RenderCellAndTurtle(Cell cell, ITurtle turtle, Coordinate coord)
     {
         var previousColor = Console.ForegroundColor;
         var isOccupiedCell = turtle.CurrentCoordinate.Equals(coord);
-
 
         var color = previousColor;
         var graphic = Empty;
@@ -70,35 +98,6 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
 
         Console.ForegroundColor = color;
         Console.Write(graphic);
-        Console.ForegroundColor = previousColor;
-    }
-
-    public void RenderMovingResult(int sequenceCount)
-    {
-        RenderActionResult("Still moving, still safe...", ConsoleColor.White, sequenceCount);
-    }
-
-    public void RenderMineHitResult(int sequenceCount)
-    {
-        RenderActionResult("KABUMMM!!! Your turtle hit a mine!", ConsoleColor.Red, sequenceCount);
-    }
-
-    public void RenderLostResult(int sequenceCount)
-    {
-        RenderActionResult("Your turtle is still lost in the field...", ConsoleColor.Yellow, sequenceCount);
-    }
-
-    public void RenderSuccessResult(int sequenceCount)
-    {
-        RenderActionResult("FREEDOM!!! Your turtle found the exit!", ConsoleColor.Cyan, sequenceCount);
-    }
-
-    private void RenderActionResult(string message, ConsoleColor color, int sequenceCount)
-    {
-        Console.Write($"Sequence {sequenceCount}:");
-        var previousColor = Console.ForegroundColor;
-        Console.ForegroundColor = color;
-        Console.WriteLine(message);
         Console.ForegroundColor = previousColor;
     }
 

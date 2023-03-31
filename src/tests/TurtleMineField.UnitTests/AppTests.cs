@@ -14,7 +14,7 @@ public class AppTests
     {
         var controller = Substitute.For<ITurtleMineFieldGameController>();
         var turtle = Substitute.For<ITurtle>();
-        var response = new TurtleActionResponse(new Cell[1, 1], new Cell(), true, ActionType.None, turtle);
+        var response = new TurtleActionResult(new Cell[1, 1], new Cell(), true, turtle);
         controller.RunAction(Arg.Any<TurtleActionRequest>()).ReturnsForAnyArgs(response);
 
         var settings = new GameSettings
@@ -42,7 +42,7 @@ public class AppTests
 
         var sut = new App.App(controller, parsingService, renderService, settings);
 
-        sut.Run("sequence");
+        sut.RunSequence("sequence");
 
         parsingService.Received(1).ParseTurtleActions(Arg.Any<string>());
         controller.Received(6).RunAction(Arg.Any<TurtleActionRequest>());

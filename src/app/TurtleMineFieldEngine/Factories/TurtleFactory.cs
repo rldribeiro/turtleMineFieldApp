@@ -7,11 +7,13 @@ namespace TurtleMineField.Core.Factories;
 internal sealed class TurtleFactory : IGameComponentFactory<ITurtle, ITurtleSettings>
 {
     private readonly List<char> _allowedDirections = new() { 'N', 'S', 'E', 'W' };
+
     public ITurtle Create(ITurtleSettings settings)
     {
         if (!_allowedDirections.Contains(settings.InitDirection))
             throw new InvalidDirectionException("Invalid direction in game settings");
 
+        // Parsing char direction to Enum
         Direction initDirection = Direction.North;
         switch (settings.InitDirection)
         {

@@ -29,8 +29,8 @@ internal sealed class MineField : IMineField
 
     /// <summary>
     /// Scatters mines through the minefield from a list of coordinates.
-    /// It does not overflows the field.
-    /// It does not override the exit coordinate.
+    /// If placing mine outside of field, throws exception.
+    /// If placing mine in exit coordinate, mine is ignored.
     /// </summary>
     /// <param name="mineCoordinates"></param>
     /// <exception cref="CoordinateOutOfBoundsException"></exception>
@@ -41,17 +41,26 @@ internal sealed class MineField : IMineField
         {
             foreach (var mineCoordinate in mineCoordinates)
             {
+                if (mineCoordinate.Equals(_exitCoordinate))
+                    continue;
+
                 currentCoordinate = mineCoordinate;
                 Cells[mineCoordinate.X, mineCoordinate.Y].Type = CellType.Mine;
             }
         }
-        catch
+        catch (IndexOutOfRangeException)
         {
             throw new CoordinateOutOfBoundsException(
                 $"Setting mine to coordinate out of bounds: x = {currentCoordinate.X}; y = {currentCoordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
         }
     }
 
+    /// <summary>
+    /// Scatters mines through the minefield in unique random positions.
+    /// It does not overflows the field.
+    /// It does not override the exit coordinate.
+    /// </summary>
+    /// <param name="numberOfMines"></param>
     public void ScatterRandomMines(int numberOfMines)
     {
         if (numberOfMines < 0)

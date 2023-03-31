@@ -2,5 +2,5 @@
 
 public interface ITurtleMineFieldGameController
 {
-    TurtleActionResponse RunAction(TurtleActionRequest action);
+    TurtleActionResult RunAction(TurtleActionRequest action);
 }

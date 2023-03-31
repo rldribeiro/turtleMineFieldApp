@@ -18,7 +18,12 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
         _turtle = turtleFactory.Create(turtleSettings);
     }
 
-    public TurtleActionResponse RunAction(TurtleActionRequest action)
+    /// <summary>
+    /// Runs one action composed of a movement or a rotation.
+    /// </summary>
+    /// <param name="action">The action request</param>
+    /// <returns>The result of the action</returns>
+    public TurtleActionResult RunAction(TurtleActionRequest action)
     {
         Cell currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
 
@@ -35,7 +40,7 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
             }
         }
 
-        return new TurtleActionResponse(_mineField.Cells, currentCell, _mineField.IsActive, action.Type, _turtle);
+        return new TurtleActionResult(_mineField.Cells, currentCell, _mineField.IsActive, _turtle);
     }
 
     private Cell MoveAndEvaluate(int actionTurns)

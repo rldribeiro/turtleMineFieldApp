@@ -4,14 +4,16 @@ public interface IMineField
 {
     public Cell[,] Cells { get; }
 
-    public int Width { get; }
-    public int Height { get; }
-
+    /// <summary>
+    /// Returns true if Mine Field is still active, meaning that a mine or the exit has not been visited.
+    /// </summary>
     public bool IsActive { get; }
 
-    public void ScatterMines(List<Coordinate> mineCoordinates);
 
-    public void ScatterRandomMines(int numberOfMines);
-
+    /// <summary>
+    /// Visits and returns a Cell at a given coordinate.
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <returns>Cell</returns>
     public Cell VisitCell(Coordinate coordinate);
 }

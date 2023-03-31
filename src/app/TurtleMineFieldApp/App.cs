@@ -23,11 +23,16 @@ internal sealed class App
         _renderBoard = settings.FieldWidth <= 100 && settings.FieldHeight <= 100;
     }
 
-    public void Run(string actionSequence)
+    /// <summary>
+    /// Runs the game with a sequence of actions.
+    /// </summary>
+    /// <param name="actionSequence"></param>
+    public void RunSequence(string actionSequence)
     {
         var actions = _parsingService.ParseTurtleActions(actionSequence);
+        var actionCount = actions.Count;
 
-        for (var i = 0; i < actions.Count; i++)
+        for (var i = 0; i < actionCount; i++)
         {
             var sequenceCount = i + 1;
             var action = actions[i];
@@ -35,27 +40,39 @@ internal sealed class App
             var response = _turtleMineFieldController.RunAction(action);
 
             if (_renderBoard)
-                _renderService.RenderMineField(response.FieldState, response.Turtle);
+                _renderService.RenderMineField(response.FieldCells, response.Turtle);
 
-            if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Mine)
-            {
-                _renderService.RenderMineHitResult(sequenceCount);
+            if (CheckIfGameEnded(response, sequenceCount, i, actionCount))
                 return;
-            }
-
-            if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Exit)
-            {
-                _renderService.RenderSuccessResult(sequenceCount);
-                return;
-            }
-
-            if (i == actions.Count - 1)
-            {
-                _renderService.RenderLostResult(sequenceCount);
-                return;
-            }
-
-            _renderService.RenderMovingResult(sequenceCount);
         }
+    }
+
+    private bool CheckIfGameEnded(TurtleActionResult response, int sequenceCount, int i, int actionCount)
+    {
+        // Check Mine hit
+        if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Mine)
+        {
+            _renderService.RenderMineHitResult(sequenceCount);
+            return true;
+        }
+
+        // Check Exit reached
+        if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Exit)
+        {
+            _renderService.RenderSuccessResult(sequenceCount);
+            return true;
+        }
+
+        // Check end of actions
+        if (i == actionCount - 1)
+        {
+            _renderService.RenderLostResult(sequenceCount);
+            return true;
+        }
+
+        // No endgame scenario reached
+        // Action processing continues
+        _renderService.RenderMovingResult(sequenceCount);
+        return false;
     }
 }

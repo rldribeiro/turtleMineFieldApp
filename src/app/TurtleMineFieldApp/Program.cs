@@ -34,7 +34,7 @@ try
     var actionSequence = File.ReadAllText(actionsFilePath);
 
     var app = host.Services.GetRequiredService<App>();
-    app.Run(actionSequence);
+    app.RunSequence(actionSequence);
 }
 catch (Exception ex)
 {
