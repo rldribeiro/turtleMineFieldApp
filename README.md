@@ -76,6 +76,12 @@ This would be interpreted as "MOVE 3 TIMES, ROTATE 3 TIMES, MOVE 2 TIMES, ROTATE
 In interactive mode you do not provide an action file. You control the movement with the keyboard.
 This was a request from my son.
 
+To run in interactive mode, simply add --interactive to the end of the command:
+
+`TurtleMineFieldApp.exe game-settings.json --intearctive`
+
+You do not need to specify actions file.
+
 ## Limitations
 
 The Mine Field size a limit of 1000x1000, but only renders to the terminal if is smaller than 100x100.
