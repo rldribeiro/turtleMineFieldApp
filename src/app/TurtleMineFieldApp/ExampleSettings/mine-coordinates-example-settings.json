@@ -1,0 +1,25 @@
+{
+  "FieldWidth": 5,
+  "FieldHeight": 5,
+  "ExitCoordinate": {
+    "X": 4,
+    "Y": 4
+  },
+  "RandomMines": false,
+  "NumberOfMines": 0,
+  "MineCoordinates": [
+    {
+      "X": 2,
+      "Y": 2
+    },
+    {
+      "X": 3,
+      "Y": 3
+    }
+  ],
+  "InitCoordinate": {
+    "X": 0,
+    "Y": 0
+  },
+  "InitDirection": "S"
+}

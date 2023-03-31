@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TurtleChallenge": {
+      "commandName": "Project",
+      "commandLineArgs": "ExampleSettings\\mine-coordinates-example-settings.json ExampleSettings\\actions-example.txt"
+    }
+  }
+}

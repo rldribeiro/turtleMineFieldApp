@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionResources", "SolutionResources", "{0C4D2DD6-E133-4914-966E-AD33835E20BF}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleMineField.App", "src\app\TurtleMineFieldApp\TurtleMineField.App.csproj", "{0CE171BB-8371-4F2E-8B49-26ED310E8E0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TurtleMineField.Core", "src\app\TurtleMineFieldEngine\TurtleMineField.Core.csproj", "{12E71D59-D7EB-415A-AF08-D5BF18545113}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C91E524F-1487-4018-A464-BC69AE8A2CB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleMineField.UnitTests", "src\tests\TurtleMineField.UnitTests\TurtleMineField.UnitTests.csproj", "{D153D25B-8B1F-413A-A304-6CDAF4FEEA67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CE171BB-8371-4F2E-8B49-26ED310E8E0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CE171BB-8371-4F2E-8B49-26ED310E8E0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CE171BB-8371-4F2E-8B49-26ED310E8E0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CE171BB-8371-4F2E-8B49-26ED310E8E0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12E71D59-D7EB-415A-AF08-D5BF18545113}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12E71D59-D7EB-415A-AF08-D5BF18545113}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12E71D59-D7EB-415A-AF08-D5BF18545113}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12E71D59-D7EB-415A-AF08-D5BF18545113}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D153D25B-8B1F-413A-A304-6CDAF4FEEA67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D153D25B-8B1F-413A-A304-6CDAF4FEEA67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D153D25B-8B1F-413A-A304-6CDAF4FEEA67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D153D25B-8B1F-413A-A304-6CDAF4FEEA67}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D153D25B-8B1F-413A-A304-6CDAF4FEEA67} = {C91E524F-1487-4018-A464-BC69AE8A2CB7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {956C6ECB-1972-4DCA-8992-237D6C70E06C}
+	EndGlobalSection
+EndGlobal

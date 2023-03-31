@@ -1,0 +1,25 @@
+{
+  "FieldWidth": 5,
+  "FieldHeight": 5,
+  "ExitCoordinate": {
+    "x": 4,
+    "y": 4
+  },
+  "RandomMines": false,
+  "NumberOfMines": null,
+  "MineCoordinates": [
+    {
+      "x": 2,
+      "y": 2
+    },
+    {
+      "x": 3,
+      "y": 3
+    }
+  ],
+  "TurtleInitCoordinate": {
+    "x": 0,
+    "y": 0
+  },
+  "TurtleInitDirection": "N"
+}
