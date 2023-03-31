@@ -1,7 +1,7 @@
 # Turtle MineField Challenge
 The Turtle MineField Challenge is a program that simulates a turtle walking through a minefield. The program reads the initial game settings from one file and one or more sequences of moves from a different file. For each move sequence, the program outputs whether the sequence leads to the success or failure of the little turtle. The program can handle scenarios where the turtle doesn't reach the exit point or doesn't hit a mine.
 
-## Running the App
+## Running the App in Sequence mode
 To run the Turtle MineField Challenge app, use the following command-line syntax:
 
 `TurtleMineFieldApp.exe <path-to-settings> <path-to-actions>`
@@ -9,7 +9,7 @@ For example, to run the app with the "game-settings.json" settings file and the 
 
 `TurtleMineFieldApp.exe game-settings.json actions.txt`
 
-## Settings Format
+### Settings Format
 The settings should be a Json File. They can model a MineField with a random number of mines or with mines at predefined coordinates.
 
 ### Random Mines Example
@@ -62,7 +62,7 @@ The settings should be a Json File. They can model a MineField with a random num
 }
 ```
 
-## Actions File
+### Actions File
 The action files are text files with the char 'm' to indicate MOVE and 'r' to indicate ROTATE 90 DEGREES CLOCKWISE. The actions file can have whitespace characters to organize the actions.
 
 Example:
@@ -70,6 +70,11 @@ Example:
 `mmm rrr mm r m rrr mm`
 
 This would be interpreted as "MOVE 3 TIMES, ROTATE 3 TIMES, MOVE 2 TIMES, ROTATE 2 TIMES, MOVE 1 TIME, ROTATE 1 TIME"
+
+## Running the app in interactive mode
+
+In interactive mode you do not provide an action file. You control the movement with the keyboard.
+This was a request from my son.
 
 ## Limitations
 
