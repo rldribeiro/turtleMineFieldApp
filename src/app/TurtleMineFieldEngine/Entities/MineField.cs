@@ -65,7 +65,7 @@ internal sealed class MineField : IMineField
     {
         if (numberOfMines < 0)
             numberOfMines = 0;
-        else if (numberOfMines > Width * Height)
+        else if (numberOfMines >= Width * Height)
             numberOfMines = Width * Height - 1;
 
         var mineCoordinates = new HashSet<(int x, int y)>();
