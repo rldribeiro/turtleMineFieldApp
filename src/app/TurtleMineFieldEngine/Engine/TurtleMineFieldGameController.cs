@@ -1,6 +1,7 @@
 ﻿using System;
 using TurtleMineField.Core.Configuration;
 using TurtleMineField.Core.Entities;
+using TurtleMineField.Core.Exceptions;
 using TurtleMineField.Core.Factories;
 
 namespace TurtleMineField.Core.Engine;
@@ -45,15 +46,26 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
 
     private Cell MoveAndEvaluate(int actionTurns)
     {
-        var currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
-        for (int i = 0; i < actionTurns; i++)
+        try
         {
-            _turtle.Move();
-            currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
-            if (currentCell.Type == CellType.Mine || currentCell.Type == CellType.Exit)
-                break;
-        }
+            var currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
+            for (int i = 0; i < actionTurns; i++)
+            {
+                _turtle.Move();
+                currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
+                if (currentCell.Type == CellType.Mine || currentCell.Type == CellType.Exit)
+                    break;
+            }
 
-        return currentCell;
+            return currentCell;
+        }
+        catch (CoordinateOutOfBoundsException)
+        {
+            var outsideCell = new Cell
+            {
+                Type = CellType.OutOfBonds
+            };
+            return outsideCell;
+        }
     }
 }

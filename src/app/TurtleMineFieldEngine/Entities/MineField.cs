@@ -1,4 +1,5 @@
-﻿using TurtleMineField.Core.Exceptions;
+﻿using System.Drawing;
+using TurtleMineField.Core.Exceptions;
 
 namespace TurtleMineField.Core.Entities;
 
@@ -68,11 +69,11 @@ internal sealed class MineField : IMineField
         else if (numberOfMines >= Width * Height)
             numberOfMines = Width * Height - 1;
 
-        var mineCoordinates = new HashSet<(int x, int y)>();
+        var mineCoordinates = new HashSet<Coordinate>();
         for (int i = 0; i < numberOfMines; i++)
         {
             var uniqueMineCoordinate = GenerateUniqueMineCoordinate(Height, Width, mineCoordinates);
-            Cells[uniqueMineCoordinate.x, uniqueMineCoordinate.y].Type = CellType.Mine;
+            Cells[uniqueMineCoordinate.X, uniqueMineCoordinate.Y].Type = CellType.Mine;
         }
     }
 
@@ -120,24 +121,24 @@ internal sealed class MineField : IMineField
         }
     }
 
-    private (int x, int y) GenerateUniqueMineCoordinate(int height, int width, HashSet<(int x, int y)> mineCoordinates)
+    private Coordinate GenerateUniqueMineCoordinate(int height, int width, HashSet<Coordinate> mineCoordinates)
     {
         var found = false;
-        int x;
-        int y;
+        Coordinate coor;
         do
         {
             var rand = new Random();
-            y = rand.Next(height);
-            x = rand.Next(width);
+            var y = rand.Next(height);
+            var x = rand.Next(width);
+            coor = new Coordinate(x, y);
 
-            if (!mineCoordinates.Contains((x, y)) && (x, y) != (_exitCoordinate.X, _exitCoordinate.Y))
+            if (!mineCoordinates.Contains(coor) && !coor.Equals(_exitCoordinate))
             {
-                mineCoordinates.Add((x, y));
+                mineCoordinates.Add(coor);
                 found = true;
             }
         } while (!found);
 
-        return (x, y);
+        return coor;
     }
 }

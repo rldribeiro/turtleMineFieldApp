@@ -10,5 +10,6 @@ public enum CellType
 {
     Empty,
     Mine,
-    Exit
+    Exit,
+    OutOfBonds
 }

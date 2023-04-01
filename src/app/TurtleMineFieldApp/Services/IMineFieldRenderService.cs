@@ -37,6 +37,12 @@ public interface IMineFieldRenderService
     void RenderMineHitResult(int sequenceCount);
 
     /// <summary>
+    /// Renders a message when the turtle leaves the field
+    /// </summary>
+    /// <param name="sequenceCount"></param>
+    void RenderOutOfFieldResult(int sequenceCount);
+
+    /// <summary>
     /// Renders a prompt to the player
     /// </summary>
     void RenderPrompt();

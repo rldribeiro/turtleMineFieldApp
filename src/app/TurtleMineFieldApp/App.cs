@@ -75,6 +75,7 @@ internal sealed class App
                     fieldState = _turtleMineFieldController.RunAction(new TurtleActionRequest(actionType, 1));
                     break;
             }
+
             gameRunning = !CheckIfGameEnded(fieldState, count);
         }
     }
@@ -92,6 +93,13 @@ internal sealed class App
         if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Exit)
         {
             _renderService.RenderSuccessResult(sequenceCount);
+            return true;
+        }
+
+        // Check Turtle Left the field
+        if (response.VisitedCell.Type == CellType.OutOfBonds)
+        {
+            _renderService.RenderOutOfFieldResult(sequenceCount);
             return true;
         }
 
