@@ -12,7 +12,7 @@ public interface IActionParsingService
     /// <param name="actionSequence">A string composed of 'r', 'm' and white spaces.</param>
     /// <returns>An ordered list of Actions</returns>
     /// <exception cref="InvalidInputException"></exception>
-    List<TurtleActionRequest> ParseActions(string actionSequence);
+    IEnumerable<TurtleActionRequest> ParseActions(string actionSequence);
 
     /// <summary>
     /// Gets an action char and parses into action type

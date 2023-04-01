@@ -6,14 +6,13 @@ namespace TurtleMineField.App.Services;
 
 internal sealed class ActionParsingService : IActionParsingService
 {
-    public List<TurtleActionRequest> ParseActions(string actionSequence)
+    public IEnumerable<TurtleActionRequest> ParseActions(string actionSequence)
     {
         if (string.IsNullOrEmpty(actionSequence))
             throw new InvalidInputException("Action sequence was null or empty");
 
         var trimmedSequence = Regex.Replace(actionSequence, @"\s+", string.Empty);
 
-        var actions = new List<TurtleActionRequest>();
 
         char currentType = trimmedSequence[0];
         int currentTurns = 1;
@@ -26,14 +25,13 @@ internal sealed class ActionParsingService : IActionParsingService
             }
             else
             {
-                actions.Add(new TurtleActionRequest(ParseActionType(currentType), currentTurns));
+                yield return new TurtleActionRequest(ParseActionType(currentType), currentTurns);
                 currentType = trimmedSequence[i];
                 currentTurns = 1;
             }
         }
 
-        actions.Add(new TurtleActionRequest(ParseActionType(currentType), currentTurns));
-        return actions;
+        yield return new TurtleActionRequest(ParseActionType(currentType), currentTurns);
     }
 
     public ActionType ParseActionType(char currentAction)

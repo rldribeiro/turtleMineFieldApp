@@ -22,7 +22,7 @@ public interface IMineFieldRenderService
     /// Renders a message when the turtle ended its movement, but haven't found a mine or the exit
     /// </summary>
     /// <param name="sequenceCount"></param>
-    void RenderLostResult(int sequenceCount);
+    void RenderLostResult();
 
     /// <summary>
     /// Renders a message when the turtle finds the exit

@@ -1,13 +1,11 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿namespace TurtleMineField.App.Services;
 
-namespace TurtleMineField.App.Services;
-
-internal interface IInputReadingService
+public interface IInputReadingService
 {
     char ReadUserInput(char[] acceptableChars);
 }
 
-class KeyboardInputReadingService : IInputReadingService
+internal sealed class KeyboardInputReadingService : IInputReadingService
 {
     public char ReadUserInput(char[] acceptableChars)
     {

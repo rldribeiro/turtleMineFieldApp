@@ -56,7 +56,13 @@ public class ActionParsingServiceTests
 
         var sequence = "mmm a rrr mm r r m r";
 
-        sut.Invoking(y => y.ParseActions(sequence))
+        sut.Invoking(y =>
+            {
+                foreach (var action in y.ParseActions(sequence))
+                {
+                    action.Should().NotBeNull();
+                }
+            })
             .Should().Throw<InvalidInputException>()
             .WithMessage("Found invalid char 'a' in sequence. Only 'm' and 'r' are valid.");
     }

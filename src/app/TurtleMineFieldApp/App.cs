@@ -1,4 +1,5 @@
-﻿using TurtleMineField.App.Services;
+﻿using System.Reflection.Metadata;
+using TurtleMineField.App.Services;
 using TurtleMineField.Core.Configuration;
 using TurtleMineField.Core.Engine;
 using TurtleMineField.Core.Entities;
@@ -33,21 +34,20 @@ internal sealed class App
     public void RunSequence(string actionSequence)
     {
         var actions = _parsingService.ParseActions(actionSequence);
-        var actionCount = actions.Count;
+        var actionCount = 0;
 
-        for (var i = 0; i < actionCount; i++)
+        foreach (var action in actions)
         {
-            var sequenceCount = i + 1;
-            var action = actions[i];
-
+            actionCount++;
             var response = _turtleMineFieldController.RunAction(action);
 
             if (_renderBoard)
                 _renderService.RenderMineField(response.FieldCells, response.Turtle);
 
-            if (CheckIfGameEnded(response, sequenceCount, i, actionCount))
+            if (CheckIfGameEnded(response, actionCount))
                 return;
         }
+        _renderService.RenderLostResult();
     }
 
     public void RunInteractive()
@@ -61,7 +61,7 @@ internal sealed class App
             _renderService.RefreshRender();
             count++;
             _renderService.RenderMineField(fieldState.FieldCells, fieldState.Turtle);
-            CheckIfGameEnded(fieldState, count, 0, 99);
+            CheckIfGameEnded(fieldState, count);
             _renderService.RenderPrompt();
 
             var actionChar = _inputReadingService.ReadUserInput(acceptableInput);
@@ -80,7 +80,7 @@ internal sealed class App
         }
     }
 
-    private bool CheckIfGameEnded(TurtleActionResult response, int sequenceCount, int i, int actionCount)
+    private bool CheckIfGameEnded(TurtleActionResult response, int sequenceCount)
     {
         // Check Mine hit
         if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Mine)
@@ -93,13 +93,6 @@ internal sealed class App
         if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Exit)
         {
             _renderService.RenderSuccessResult(sequenceCount);
-            return true;
-        }
-
-        // Check end of actions
-        if (i >= actionCount - 1)
-        {
-            _renderService.RenderLostResult(sequenceCount);
             return true;
         }
 

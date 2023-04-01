@@ -39,9 +39,9 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         RenderActionResult("Still moving, still safe...", ConsoleColor.White, sequenceCount);
     }
 
-    public void RenderLostResult(int sequenceCount)
+    public void RenderLostResult()
     {
-        RenderActionResult("Your turtle is still lost in the field...", ConsoleColor.Yellow, sequenceCount);
+        RenderActionResult("Actions ended and your turtle is still lost in the field...", ConsoleColor.Yellow, 0);
     }
 
     public void RenderMineHitResult(int sequenceCount)
@@ -78,7 +78,9 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
 
     private void RenderActionResult(string message, ConsoleColor color, int sequenceCount)
     {
-        Console.Write($"Sequence {sequenceCount}:");
+        if(sequenceCount > 0)
+            Console.Write($"Sequence {sequenceCount}:");
+
         var previousColor = Console.ForegroundColor;
         Console.ForegroundColor = color;
         Console.WriteLine(message);
