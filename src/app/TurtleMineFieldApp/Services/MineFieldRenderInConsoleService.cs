@@ -73,7 +73,8 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
 
     public void RefreshRender()
     {
-        Console.Clear();
+        Console.CursorVisible = false;
+        Console.SetCursorPosition(0,0);
     }
 
     public void RenderSuccessResult(int sequenceCount)
