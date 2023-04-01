@@ -61,7 +61,6 @@ internal sealed class App
             _renderService.RefreshRender();
             count++;
             _renderService.RenderMineField(fieldState.FieldCells, fieldState.Turtle);
-            CheckIfGameEnded(fieldState, count);
             _renderService.RenderPrompt();
 
             var actionChar = _inputReadingService.ReadUserInput(acceptableInput);
@@ -70,13 +69,13 @@ internal sealed class App
             switch (actionType)
             {
                 case ActionType.Quit:
-                    gameRunning = false;
-                    break;
+                    return;
                 case ActionType.Rotate:
                 case ActionType.Move:
                     fieldState = _turtleMineFieldController.RunAction(new TurtleActionRequest(actionType, 1));
                     break;
             }
+            gameRunning = !CheckIfGameEnded(fieldState, count);
         }
     }
 
