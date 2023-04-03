@@ -74,7 +74,7 @@ internal sealed class MineField : IMineField
         for (int i = 0; i < numberOfMines; i++)
         {
             var uniqueMineCoordinate = GenerateUniqueMineCoordinate(Height, Width, mineCoordinates);
-            _cells[uniqueMineCoordinate.X, uniqueMineCoordinate.Y].Type = CellType.Mine;
+            GetCell(uniqueMineCoordinate).Type = CellType.Mine;
         }
     }
 
