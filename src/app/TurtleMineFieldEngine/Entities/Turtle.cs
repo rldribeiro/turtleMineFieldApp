@@ -27,13 +27,13 @@ internal sealed class Turtle : ITurtle
     private Coordinate GenerateCoordinateUpdate()
     {
         if (CurrentDirection.Equals(Direction.North))
-            return new Coordinate(-1, 0);
-        if (CurrentDirection.Equals(Direction.South))
-            return new Coordinate(1, 0);
-        if (CurrentDirection.Equals(Direction.East))
-            return new Coordinate(0, 1);
-        if (CurrentDirection.Equals(Direction.West))
             return new Coordinate(0, -1);
+        if (CurrentDirection.Equals(Direction.South))
+            return new Coordinate(0, 1);
+        if (CurrentDirection.Equals(Direction.East))
+            return new Coordinate(1, 0);
+        if (CurrentDirection.Equals(Direction.West))
+            return new Coordinate(-1, 0);
 
         return Coordinate.Origin;
     }

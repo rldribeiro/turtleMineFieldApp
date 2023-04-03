@@ -6,6 +6,7 @@ namespace TurtleMineField.Core.Entities;
 internal sealed class MineField : IMineField
 {
     private readonly Coordinate _exitCoordinate;
+    private Cell[,] _cells;
 
     public MineField(int width, int height, Coordinate exitCoordinate)
     {
@@ -15,15 +16,15 @@ internal sealed class MineField : IMineField
         if (width > 1000 || height > 1000)
             throw new InvalidMineFieldException("A field has a size limit of 1000 x 1000");
 
-        _exitCoordinate = exitCoordinate;
-        Cells = new Cell[width, height];
         Width = width;
         Height = height;
+
+        _cells = new Cell[height, width];
+        _exitCoordinate = exitCoordinate;
 
         InitializeField();
     }
 
-    public Cell[,] Cells { get; }
     public int Width { get; }
     public int Height { get; }
     public bool IsActive { get; private set; }
@@ -46,7 +47,7 @@ internal sealed class MineField : IMineField
                     continue;
 
                 currentCoordinate = mineCoordinate;
-                Cells[mineCoordinate.X, mineCoordinate.Y].Type = CellType.Mine;
+                GetCell(mineCoordinate).Type = CellType.Mine;
             }
         }
         catch (IndexOutOfRangeException)
@@ -73,10 +74,17 @@ internal sealed class MineField : IMineField
         for (int i = 0; i < numberOfMines; i++)
         {
             var uniqueMineCoordinate = GenerateUniqueMineCoordinate(Height, Width, mineCoordinates);
-            Cells[uniqueMineCoordinate.X, uniqueMineCoordinate.Y].Type = CellType.Mine;
+            _cells[uniqueMineCoordinate.X, uniqueMineCoordinate.Y].Type = CellType.Mine;
         }
     }
 
+    /// <summary>
+    /// Move to a cell and mark it as visited
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <returns>The visited Cell</returns>
+    /// <exception cref="InvalidMineFieldException"></exception>
+    /// <exception cref="CoordinateOutOfBoundsException"></exception>
     public Cell VisitCell(Coordinate coordinate)
     {
         if (!IsActive)
@@ -84,7 +92,7 @@ internal sealed class MineField : IMineField
 
         try
         {
-            var visitedCell = Cells[coordinate.X, coordinate.Y];
+            var visitedCell = GetCell(coordinate);
             if (visitedCell.Type.Equals(CellType.Mine) || visitedCell.Type.Equals(CellType.Exit))
                 IsActive = false;
 
@@ -98,6 +106,17 @@ internal sealed class MineField : IMineField
         }
     }
 
+    /// <summary>
+    /// Gets a cell without marking as visited.
+    /// Has no in game consequence.
+    /// </summary>
+    /// <param name="coordinate"></param>
+    /// <returns>Cell</returns>
+    public Cell GetCell(Coordinate coordinate)
+    {
+        return _cells[coordinate.Y, coordinate.X];
+    }
+
     private void InitializeField()
     {
         IsActive = true;
@@ -106,13 +125,14 @@ internal sealed class MineField : IMineField
         {
             for (int j = 0; j < Height; j++)
             {
-                Cells[i, j] = new Cell();
+                // Invert row and col to correctly map to X and Y
+                _cells[j, i] = new Cell();
             }
         }
 
         try
         {
-            Cells[_exitCoordinate.X, _exitCoordinate.Y].Type = CellType.Exit;
+            GetCell(_exitCoordinate).Type = CellType.Exit;
         }
         catch
         {

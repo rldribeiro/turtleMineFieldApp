@@ -14,18 +14,15 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
     private const string Visited = "*";
     private const string Empty = "-";
 
-    public void RenderMineField(Cell[,] cells, ITurtle turtle)
+    public void RenderMineField(IMineField field, ITurtle turtle)
     {
-        var width = cells.GetLength(0);
-        var height = cells.GetLength(1);
-
         Console.WriteLine();
-        for (int i = 0; i < width; i++)
+        for (int y = 0; y < field.Height; y++)
         {
-            for (int j = 0; j < height; j++)
+            for (int x = 0; x < field.Width; x++)
             {
-                var coord = new Coordinate(i, j);
-                var cell = cells[i, j];
+                var coord = new Coordinate(x, y);
+                var cell = field.GetCell(coord);
 
                 RenderCellAndTurtle(cell, turtle, coord);
             }

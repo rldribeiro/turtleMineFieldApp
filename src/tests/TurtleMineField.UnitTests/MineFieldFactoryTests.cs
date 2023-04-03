@@ -47,8 +47,8 @@ public class MineFieldFactoryTests
         var sut = new MineFieldFactory();
         var mineField = sut.Create(settings);
 
-        mineField.Cells.OfType<Cell>().Count(mineFieldCell => mineFieldCell.Type == CellType.Mine)
-            .Should().Be(1);
+        int mineCount = CountMines(mineField);
+        CountMines(mineField).Should().Be(1);
     }
 
     [TestMethod]
@@ -71,8 +71,7 @@ public class MineFieldFactoryTests
         var sut = new MineFieldFactory();
         var mineField = sut.Create(settings);
 
-        mineField.Cells.OfType<Cell>().Count(mineFieldCell => mineFieldCell.Type == CellType.Mine)
-            .Should().Be(2);
+        CountMines(mineField).Should().Be(2);
     }
 
     [TestMethod]
@@ -111,5 +110,44 @@ public class MineFieldFactoryTests
         sut.Invoking(y => y.Create(settings))
             .Should().Throw<InvalidMineFieldException>()
             .WithMessage("A field has a size limit of 1000 x 1000");
+    }
+
+    [DataTestMethod]
+    [DataRow(100)]
+    [DataRow(101)]
+    [DataRow(99)]
+    [DataRow(200)]
+    public void WhenScatteringRandomMinesShouldTrimMinesCount(int mineInputCount)
+    {
+        var settings = new GameSettings
+        {
+            FieldHeight = 10,
+            FieldWidth = 10,
+            RandomMines = true,
+            NumberOfMines = mineInputCount,
+            ExitCoordinate = new Coordinate(4, 4)
+        };
+
+        var sut = new MineFieldFactory();
+
+        var mineField = sut.Create(settings);
+
+        // Number of mines should be maxed to total cell count - 1 for exit coordinate.
+        CountMines(mineField).Should().Be(99);
+    }
+
+    private int CountMines(IMineField mineField)
+    {
+        var count = 0;
+        for (int y = 0; y < mineField.Height; y++)
+        {
+            for (int x = 0; x < mineField.Width; x++)
+            {
+                if (mineField.GetCell(new Coordinate(x, y)).Type == CellType.Mine)
+                    count++;
+            }
+        }
+
+        return count;
     }
 }

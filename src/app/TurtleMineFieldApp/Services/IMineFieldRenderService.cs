@@ -10,7 +10,7 @@ public interface IMineFieldRenderService
     /// </summary>
     /// <param name="cells"></param>
     /// <param name="turtle"></param>
-    void RenderMineField(Cell[,] cells, ITurtle turtle);
+    void RenderMineField(IMineField field, ITurtle turtle);
 
     /// <summary>
     /// Renders a message when the turtle ends in an empty cell, but still has actions to perform

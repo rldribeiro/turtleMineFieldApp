@@ -41,7 +41,7 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
             }
         }
 
-        return new TurtleActionResult(_mineField.Cells, currentCell, _mineField.IsActive, _turtle);
+        return new TurtleActionResult(_mineField, currentCell, _mineField.IsActive, _turtle);
     }
 
     private Cell MoveAndEvaluate(int actionTurns)

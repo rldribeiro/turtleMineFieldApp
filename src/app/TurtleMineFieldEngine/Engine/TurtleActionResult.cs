@@ -13,15 +13,15 @@ public class TurtleActionResult
     /// <param name="isFieldActive"></param>
     /// <param name="actionType"></param>
     /// <param name="turtle"></param>
-    public TurtleActionResult(Cell[,] fieldCells, Cell visitedCell, bool isFieldActive, ITurtle turtle)
+    public TurtleActionResult(IMineField field, Cell visitedCell, bool isFieldActive, ITurtle turtle)
     {
-        FieldCells = fieldCells;
+        Field = field;
         VisitedCell = visitedCell;
         IsFieldActive = isFieldActive;
         Turtle = turtle;
     }
 
-    public Cell[,] FieldCells { get; }
+    public IMineField Field { get; }
     public Cell VisitedCell { get; }
     public bool IsFieldActive { get; }
     public ITurtle Turtle { get; }

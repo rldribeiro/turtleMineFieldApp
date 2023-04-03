@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using TurtleMineField.App.Services;
+﻿using TurtleMineField.App.Services;
 using TurtleMineField.Core.Configuration;
 using TurtleMineField.Core.Engine;
 using TurtleMineField.Core.Entities;
@@ -42,7 +41,7 @@ internal sealed class App
             var response = _turtleMineFieldController.RunAction(action);
 
             if (_renderBoard)
-                _renderService.RenderMineField(response.FieldCells, response.Turtle);
+                _renderService.RenderMineField(response.Field, response.Turtle);
 
             if (CheckIfGameEnded(response, actionCount))
                 return;
@@ -60,7 +59,7 @@ internal sealed class App
         {
             _renderService.RefreshRender();
             count++;
-            _renderService.RenderMineField(fieldState.FieldCells, fieldState.Turtle);
+            _renderService.RenderMineField(fieldState.Field, fieldState.Turtle);
             _renderService.RenderPrompt();
 
             var actionChar = _inputReadingService.ReadUserInput(acceptableInput);
