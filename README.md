@@ -67,7 +67,7 @@ The action files are text files with the char 'm' to indicate MOVE and 'r' to in
 
 Example:
 
-`mmm rrr mm r m rrr mm`
+`mmm rrr mm rr m r`
 
 This would be interpreted as "MOVE 3 TIMES, ROTATE 3 TIMES, MOVE 2 TIMES, ROTATE 2 TIMES, MOVE 1 TIME, ROTATE 1 TIME"
 
