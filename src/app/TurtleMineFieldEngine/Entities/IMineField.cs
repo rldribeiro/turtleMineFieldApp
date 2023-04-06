@@ -1,4 +1,6 @@
-﻿namespace TurtleMineField.Core.Entities;
+﻿using TurtleMineField.Core.Entities.Cells;
+
+namespace TurtleMineField.Core.Entities;
 
 public interface IMineField
 {
@@ -10,17 +12,17 @@ public interface IMineField
     /// <summary>
     /// Returns true if Mine Field is still active, meaning that a mine or the exit has not been visited.
     /// </summary>
-    bool IsActive { get; }
+    bool IsActive { get; set; }
 
     /// <summary>
     /// Visits and returns a Cell at a given coordinate.
     /// </summary>
     /// <param name="coordinate"></param>
     /// <returns>Cell</returns>
-    Cell VisitCell(Coordinate coordinate);
+    ICell VisitCell(Coordinate coordinate);
 
     /// <summary>
     /// Returns a cell of the field at a given X, Y coordinate
     /// </summary>
-    Cell GetCell(Coordinate coordinate);
+    ICell GetCell(Coordinate coordinate);
 }

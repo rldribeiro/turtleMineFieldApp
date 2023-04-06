@@ -14,6 +14,7 @@ internal class GameSettings : ITurtleSettings, IMineFieldSettings
     public bool RandomMines { get; set; }
     public int NumberOfMines { get; set; }
     public Coordinate[] MineCoordinates { get; set; } = { };
+    public Coordinate[][] PortalCoordinates { get; set; } = { };
 
     // ITurtleSettings implementation
     public Coordinate InitCoordinate { get; set; } = Coordinate.Origin;

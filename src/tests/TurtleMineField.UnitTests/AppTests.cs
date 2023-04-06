@@ -3,6 +3,7 @@ using TurtleMineField.App.Configuration;
 using TurtleMineField.App.Services;
 using TurtleMineField.Core.Controller;
 using TurtleMineField.Core.Entities;
+using TurtleMineField.Core.Entities.Cells;
 
 namespace TurtleMineField.UnitTests;
 
@@ -14,7 +15,7 @@ public class AppTests
     {
         var controller = Substitute.For<ITurtleMineFieldGameController>();
         var turtle = Substitute.For<ITurtle>();
-        var response = new TurtleActionResult(new MineField(1,1, Coordinate.Origin), new Cell(), true, turtle);
+        var response = new TurtleActionResult(new MineField(1,1, Coordinate.Origin), new EmptyCell(), true, turtle);
         controller.RunAction(Arg.Any<TurtleActionRequest>()).ReturnsForAnyArgs(response);
 
         var settings = new GameSettings
@@ -23,7 +24,8 @@ public class AppTests
             FieldWidth = 5,
             RandomMines = true,
             NumberOfMines = 3,
-            ExitCoordinate = new Coordinate(4, 4)
+            ExitCoordinate = new Coordinate(4, 4),
+            RenderField = true
         };
 
         var actionList = new List<TurtleActionRequest>
@@ -46,7 +48,7 @@ public class AppTests
         sut.RunSequence("sequence");
 
         parsingService.Received(1).ParseActions(Arg.Any<string>());
-        controller.Received(6).RunAction(Arg.Any<TurtleActionRequest>());
+        controller.Received(6).RunAction(Arg.Any<TurtleActionRequest>(), true);
         renderService.Received(6).RenderMineField(Arg.Any<MineField>(), Arg.Any<ITurtle>());
     }
 }

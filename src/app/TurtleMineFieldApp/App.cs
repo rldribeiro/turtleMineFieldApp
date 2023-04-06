@@ -1,8 +1,7 @@
 ﻿using TurtleMineField.App.Configuration;
 using TurtleMineField.App.Services;
-using TurtleMineField.Core.Configuration;
 using TurtleMineField.Core.Controller;
-using TurtleMineField.Core.Entities;
+using TurtleMineField.Core.Entities.Cells;
 
 namespace TurtleMineField.App;
 
@@ -64,8 +63,8 @@ internal sealed class App
         var gameRunning = true;
         while (gameRunning)
         {
-            _renderService.RefreshRender();
             count++;
+            _renderService.RefreshRender();
             _renderService.RenderMineField(fieldState.Field, fieldState.Turtle);
             _renderService.RenderPrompt();
 
@@ -89,21 +88,21 @@ internal sealed class App
     private bool CheckIfGameEnded(TurtleActionResult response, int sequenceCount)
     {
         // Check Mine hit
-        if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Mine)
+        if (!response.IsFieldActive && response.VisitedCell is MineCell)
         {
             _renderService.RenderMineHitResult(sequenceCount);
             return true;
         }
 
         // Check Exit reached
-        if (!response.IsFieldActive && response.VisitedCell.Type == CellType.Exit)
+        if (!response.IsFieldActive && response.VisitedCell is ExitCell)
         {
             _renderService.RenderSuccessResult(sequenceCount);
             return true;
         }
 
         // Check Turtle Left the field
-        if (response.VisitedCell.Type == CellType.OutOfBonds)
+        if (response.VisitedCell is OutOfFieldCell)
         {
             _renderService.RenderOutOfFieldResult(sequenceCount);
             return true;

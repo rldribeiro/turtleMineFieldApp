@@ -18,6 +18,8 @@ internal sealed class MineFieldFactory : IGameComponentFactory<IMineField, IMine
             mineField.ScatterMines(settings.MineCoordinates.ToList());
         }
 
+        mineField.ScatterPortals(settings.PortalCoordinates);
+
         return mineField;
     }
 }

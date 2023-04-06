@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using TurtleMineField.App.Configuration;
 using TurtleMineField.Core.Entities;
+using TurtleMineField.Core.Entities.Cells;
 using TurtleMineField.Core.Exceptions;
 using TurtleMineField.Core.Factories;
 
@@ -143,7 +144,7 @@ public class MineFieldFactoryTests
         {
             for (int x = 0; x < mineField.Width; x++)
             {
-                if (mineField.GetCell(new Coordinate(x, y)).Type == CellType.Mine)
+                if (mineField.GetCell(new Coordinate(x, y)) is MineCell)
                     count++;
             }
         }

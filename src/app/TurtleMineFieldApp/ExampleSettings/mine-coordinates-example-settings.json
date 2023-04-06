@@ -1,22 +1,55 @@
 {
-  "FieldWidth": 5,
-  "FieldHeight": 5,
+  "FieldWidth": 20,
+  "FieldHeight": 15,
   "ExitCoordinate": {
-    "X": 4,
-    "Y": 4
+    "X": 19,
+    "Y": 14
   },
   "RandomMines": false,
   "NumberOfMines": 0,
   "MineCoordinates": [
     {
       "X": 2,
-      "Y": 2
+      "Y": 1
     },
+
     {
       "X": 3,
       "Y": 3
+    },
+    {
+      "X": 10,
+      "Y": 12
+    },
+
+    {
+      "X": 4,
+      "Y": 10
     }
   ],
+  "PortalCoordinates": [
+    [
+      {
+        "X": 8,
+        "Y": 4
+      },
+      {
+        "X": 9,
+        "Y": 10
+      }
+    ],
+    [
+      {
+        "X": 3,
+        "Y": 7
+      },
+      {
+        "X": 12,
+        "Y": 8
+      }
+    ]
+  ],
+  "RenderField": true,
   "InitCoordinate": {
     "X": 0,
     "Y": 0

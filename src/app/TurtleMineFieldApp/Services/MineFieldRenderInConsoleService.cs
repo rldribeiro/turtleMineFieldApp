@@ -1,5 +1,6 @@
 ﻿using TurtleMineField.App.Exceptions;
 using TurtleMineField.Core.Entities;
+using TurtleMineField.Core.Entities.Cells;
 
 namespace TurtleMineField.App.Services;
 
@@ -12,6 +13,7 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
     private const string Mine = "#";
     private const string Exit = "O";
     private const string Visited = "*";
+    private const string Portal = "H";
     private const string Empty = "-";
 
     public void RenderMineField(IMineField field, ITurtle turtle)
@@ -90,24 +92,24 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         Console.ForegroundColor = previousColor;
     }
 
-    private void RenderCellAndTurtle(Cell cell, ITurtle turtle, Coordinate coord)
+    private void RenderCellAndTurtle(ICell cell, ITurtle turtle, Coordinate coord)
     {
         var previousColor = Console.ForegroundColor;
         var isOccupiedCell = turtle.CurrentCoordinate.Equals(coord);
 
         var color = previousColor;
         var graphic = Empty;
-        if (cell.Type == CellType.Mine && isOccupiedCell)
+        if (cell is MineCell && isOccupiedCell)
         {
             color = ConsoleColor.Red;
             graphic = Mine;
         }
-        else if (cell.Type == CellType.Mine)
+        else if (cell is MineCell)
         {
             color = ConsoleColor.DarkGray;
             graphic = Mine;
         }
-        else if (cell.Type == CellType.Exit)
+        else if (cell is ExitCell)
         {
             color = ConsoleColor.Yellow;
             graphic = Exit;
@@ -116,6 +118,11 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         {
             color = ConsoleColor.Magenta;
             graphic = RenderTurtle(turtle.CurrentDirection);
+        }
+        else if (cell is PortalCell)
+        {
+            color = ConsoleColor.Cyan;
+            graphic = Portal;
         }
         else if (cell.WasVisited)
         {

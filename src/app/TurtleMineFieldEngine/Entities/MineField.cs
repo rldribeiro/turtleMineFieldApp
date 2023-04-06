@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+﻿using TurtleMineField.Core.Entities.Cells;
 using TurtleMineField.Core.Exceptions;
 
 namespace TurtleMineField.Core.Entities;
@@ -6,7 +6,7 @@ namespace TurtleMineField.Core.Entities;
 internal sealed class MineField : IMineField
 {
     private readonly Coordinate _exitCoordinate;
-    private Cell[,] _cells;
+    private readonly ICell[,] _cells;
 
     public MineField(int width, int height, Coordinate exitCoordinate)
     {
@@ -19,7 +19,7 @@ internal sealed class MineField : IMineField
         Width = width;
         Height = height;
 
-        _cells = new Cell[height, width];
+        _cells = new ICell[height, width];
         _exitCoordinate = exitCoordinate;
         IsActive = true;
         CoordinatesWithConsequence = new SortedSet<Coordinate>();
@@ -30,7 +30,7 @@ internal sealed class MineField : IMineField
     public int Width { get; }
     public int Height { get; }
     public SortedSet<Coordinate> CoordinatesWithConsequence { get; }
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; set; }
 
     /// <summary>
     /// Scatters mines through the minefield from a list of coordinates.
@@ -50,7 +50,7 @@ internal sealed class MineField : IMineField
                     continue;
 
                 currentCoordinate = mineCoordinate;
-                GetCell(mineCoordinate).Type = CellType.Mine;
+                ReplaceCell(mineCoordinate, new MineCell());
                 CoordinatesWithConsequence.Add(mineCoordinate);
             }
         }
@@ -77,8 +77,25 @@ internal sealed class MineField : IMineField
         for (int i = 0; i < numberOfMines; i++)
         {
             var uniqueMineCoordinate = GenerateUniqueMineCoordinate(Height, Width);
-            GetCell(uniqueMineCoordinate).Type = CellType.Mine;
+            ReplaceCell(uniqueMineCoordinate, new MineCell());
             CoordinatesWithConsequence.Add(uniqueMineCoordinate);
+        }
+    }
+
+    public void ScatterPortals(Coordinate[][] portalCoordinates)
+    {
+        foreach (var portalCoordinate in portalCoordinates)
+        {
+            // Each portal has the other coordinate as destination
+            // Hence creating pairs of portals interconnected
+            var coordinate1 = portalCoordinate[0];
+            var coordinate2 = portalCoordinate[1];
+
+            var portal1 = new PortalCell(coordinate2);
+            var portal2 = new PortalCell(coordinate1);
+
+            ReplaceCell(coordinate1, portal1);
+            ReplaceCell(coordinate2, portal2);
         }
     }
 
@@ -89,7 +106,7 @@ internal sealed class MineField : IMineField
     /// <returns>The visited Cell</returns>
     /// <exception cref="InvalidMineFieldException"></exception>
     /// <exception cref="CoordinateOutOfBoundsException"></exception>
-    public Cell VisitCell(Coordinate coordinate)
+    public ICell VisitCell(Coordinate coordinate)
     {
         if (!IsActive)
             throw new InvalidMineFieldException("The accessed mine field was not active.");
@@ -97,9 +114,6 @@ internal sealed class MineField : IMineField
         try
         {
             var visitedCell = GetCell(coordinate);
-            if (visitedCell.Type.Equals(CellType.Mine) || visitedCell.Type.Equals(CellType.Exit))
-                IsActive = false;
-
             visitedCell.WasVisited = true;
             return visitedCell;
         }
@@ -116,7 +130,7 @@ internal sealed class MineField : IMineField
     /// </summary>
     /// <param name="coordinate"></param>
     /// <returns>Cell</returns>
-    public Cell GetCell(Coordinate coordinate)
+    public ICell GetCell(Coordinate coordinate)
     {
         return _cells[coordinate.Y, coordinate.X];
     }
@@ -128,13 +142,13 @@ internal sealed class MineField : IMineField
             for (int j = 0; j < Height; j++)
             {
                 // Invert row and col to correctly map to X and Y
-                _cells[j, i] = new Cell();
+                _cells[j, i] = new EmptyCell();
             }
         }
 
         try
         {
-            GetCell(_exitCoordinate).Type = CellType.Exit;
+            ReplaceCell(_exitCoordinate, new ExitCell());
             CoordinatesWithConsequence.Add(_exitCoordinate);
         }
         catch
@@ -142,6 +156,11 @@ internal sealed class MineField : IMineField
             throw new CoordinateOutOfBoundsException(
                 $"Setting exit to coordinate out of bounds: x = {_exitCoordinate.X}; y = {_exitCoordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
         }
+    }
+
+    private void ReplaceCell(Coordinate coordinate, ICell newCell)
+    {
+        _cells[coordinate.Y, coordinate.X] = newCell;
     }
 
     private Coordinate GenerateUniqueMineCoordinate(int height, int width)

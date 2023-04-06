@@ -8,6 +8,7 @@
   "RandomMines": true,
   "NumberOfMines": 10,
   "MineCoordinates": [],
+  "RenderField": true,
   "TurtleInitCoordinate": {
     "x": 0,
     "y": 0
