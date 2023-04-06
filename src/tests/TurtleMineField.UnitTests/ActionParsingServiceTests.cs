@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using TurtleMineField.App.Exceptions;
 using TurtleMineField.App.Services;
-using TurtleMineField.Core.Engine;
+using TurtleMineField.Core.Controller;
 
 namespace TurtleMineField.UnitTests;
 

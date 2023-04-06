@@ -21,12 +21,15 @@ internal sealed class MineField : IMineField
 
         _cells = new Cell[height, width];
         _exitCoordinate = exitCoordinate;
+        IsActive = true;
+        CoordinatesWithConsequence = new SortedSet<Coordinate>();
 
-        InitializeField();
+        InitializeCells();
     }
 
     public int Width { get; }
     public int Height { get; }
+    public SortedSet<Coordinate> CoordinatesWithConsequence { get; }
     public bool IsActive { get; private set; }
 
     /// <summary>
@@ -48,6 +51,7 @@ internal sealed class MineField : IMineField
 
                 currentCoordinate = mineCoordinate;
                 GetCell(mineCoordinate).Type = CellType.Mine;
+                CoordinatesWithConsequence.Add(mineCoordinate);
             }
         }
         catch (IndexOutOfRangeException)
@@ -70,11 +74,11 @@ internal sealed class MineField : IMineField
         else if (numberOfMines >= Width * Height)
             numberOfMines = Width * Height - 1;
 
-        var mineCoordinates = new HashSet<Coordinate>();
         for (int i = 0; i < numberOfMines; i++)
         {
-            var uniqueMineCoordinate = GenerateUniqueMineCoordinate(Height, Width, mineCoordinates);
+            var uniqueMineCoordinate = GenerateUniqueMineCoordinate(Height, Width);
             GetCell(uniqueMineCoordinate).Type = CellType.Mine;
+            CoordinatesWithConsequence.Add(uniqueMineCoordinate);
         }
     }
 
@@ -117,10 +121,8 @@ internal sealed class MineField : IMineField
         return _cells[coordinate.Y, coordinate.X];
     }
 
-    private void InitializeField()
+    private void InitializeCells()
     {
-        IsActive = true;
-
         for (int i = 0; i < Width; i++)
         {
             for (int j = 0; j < Height; j++)
@@ -133,6 +135,7 @@ internal sealed class MineField : IMineField
         try
         {
             GetCell(_exitCoordinate).Type = CellType.Exit;
+            CoordinatesWithConsequence.Add(_exitCoordinate);
         }
         catch
         {
@@ -141,7 +144,7 @@ internal sealed class MineField : IMineField
         }
     }
 
-    private Coordinate GenerateUniqueMineCoordinate(int height, int width, HashSet<Coordinate> mineCoordinates)
+    private Coordinate GenerateUniqueMineCoordinate(int height, int width)
     {
         var found = false;
         Coordinate coor;
@@ -152,9 +155,8 @@ internal sealed class MineField : IMineField
             var x = rand.Next(width);
             coor = new Coordinate(x, y);
 
-            if (!mineCoordinates.Contains(coor) && !coor.Equals(_exitCoordinate))
+            if (!CoordinatesWithConsequence.Contains(coor) && !coor.Equals(_exitCoordinate))
             {
-                mineCoordinates.Add(coor);
                 found = true;
             }
         } while (!found);

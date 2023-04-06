@@ -1,7 +1,7 @@
 ﻿using NSubstitute;
 using TurtleMineField.App.Configuration;
 using TurtleMineField.App.Services;
-using TurtleMineField.Core.Engine;
+using TurtleMineField.Core.Controller;
 using TurtleMineField.Core.Entities;
 
 namespace TurtleMineField.UnitTests;

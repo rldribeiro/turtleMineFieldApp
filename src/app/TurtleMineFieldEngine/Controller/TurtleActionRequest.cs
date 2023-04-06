@@ -1,4 +1,4 @@
-﻿namespace TurtleMineField.Core.Engine;
+﻿namespace TurtleMineField.Core.Controller;
 
 public class TurtleActionRequest
 {

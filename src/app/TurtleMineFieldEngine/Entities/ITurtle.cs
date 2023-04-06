@@ -14,7 +14,13 @@ public interface ITurtle
     void Rotate90(int turns = 1, bool clockwise = true);
 
     /// <summary>
-    /// Moves the turtle one cell in the direction it is facing.
+    /// Moves the turtle in the direction it is facing.
     /// </summary>
-    void Move();
+    /// <param name="steps">The number of steps to move</param>
+    void Move(int steps = 1);
+
+    /// <summary>
+    /// Transports the turtle to the destination coordinate
+    /// </summary>
+    void MoveTo(Coordinate coordinate);
 }

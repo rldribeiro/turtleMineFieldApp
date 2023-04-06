@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using TurtleMineField.App.Exceptions;
-using TurtleMineField.Core.Engine;
+using TurtleMineField.Core.Controller;
 
 namespace TurtleMineField.App.Services;
 

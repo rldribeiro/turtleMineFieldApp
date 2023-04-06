@@ -1,5 +1,5 @@
 ﻿using TurtleMineField.App.Exceptions;
-using TurtleMineField.Core.Engine;
+using TurtleMineField.Core.Controller;
 
 namespace TurtleMineField.App.Services;
 

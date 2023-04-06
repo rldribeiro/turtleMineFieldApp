@@ -18,23 +18,31 @@ internal sealed class Turtle : ITurtle
         CurrentDirection = (Direction)(((int)CurrentDirection + turns * directionMultiplier) % 4);
     }
 
-    public void Move()
+    public void Move(int steps)
     {
-        var coordUpdate = GenerateCoordinateUpdate();
+        var coordUpdate = GenerateCoordinateUpdate(steps);
         CurrentCoordinate = new Coordinate(CurrentCoordinate.X + coordUpdate.X, CurrentCoordinate.Y + coordUpdate.Y);
     }
 
-    private Coordinate GenerateCoordinateUpdate()
+    public void MoveTo(Coordinate coordinate)
     {
-        if (CurrentDirection.Equals(Direction.North))
-            return new Coordinate(0, -1);
-        if (CurrentDirection.Equals(Direction.South))
-            return new Coordinate(0, 1);
-        if (CurrentDirection.Equals(Direction.East))
-            return new Coordinate(1, 0);
-        if (CurrentDirection.Equals(Direction.West))
-            return new Coordinate(-1, 0);
+        CurrentCoordinate = coordinate;
+    }
 
-        return Coordinate.Origin;
+    private Coordinate GenerateCoordinateUpdate(int steps)
+    {
+        switch (CurrentDirection)
+        {
+            case Direction.North:
+                return new Coordinate(0, -steps);
+            case Direction.South:
+                return new Coordinate(0, steps);
+            case Direction.East:
+                return new Coordinate(steps, 0);
+            case Direction.West:
+                return new Coordinate(-steps, 0);
+            default:
+                return Coordinate.Origin;
+        }
     }
 }

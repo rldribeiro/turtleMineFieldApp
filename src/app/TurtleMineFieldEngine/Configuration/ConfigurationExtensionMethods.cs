@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TurtleMineField.Core.Engine;
+using TurtleMineField.Core.Controller;
 using TurtleMineField.Core.Entities;
 using TurtleMineField.Core.Factories;
 

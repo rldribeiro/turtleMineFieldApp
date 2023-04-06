@@ -1,29 +1,34 @@
-﻿using TurtleMineField.App.Services;
+﻿using TurtleMineField.App.Configuration;
+using TurtleMineField.App.Services;
 using TurtleMineField.Core.Configuration;
-using TurtleMineField.Core.Engine;
+using TurtleMineField.Core.Controller;
 using TurtleMineField.Core.Entities;
 
 namespace TurtleMineField.App;
 
 internal sealed class App
 {
+    private const int FieldSizeRenderLimit = 100;
     private readonly ITurtleMineFieldGameController _turtleMineFieldController;
     private readonly IActionParsingService _parsingService;
     private readonly IMineFieldRenderService _renderService;
     private readonly IInputReadingService _inputReadingService;
-    private readonly bool _renderBoard;
+    private readonly bool _renderField;
 
     public App(ITurtleMineFieldGameController turtleMineFieldController,
         IActionParsingService parsingService,
         IMineFieldRenderService renderService,
         IInputReadingService inputReadingService,
-        IMineFieldSettings settings)
+        GameSettings settings)
     {
         _turtleMineFieldController = turtleMineFieldController;
         _parsingService = parsingService;
         _renderService = renderService;
         _inputReadingService = inputReadingService;
-        _renderBoard = settings.FieldWidth <= 100 && settings.FieldHeight <= 100;
+
+        _renderField = settings.RenderField
+                       && settings.FieldWidth <= FieldSizeRenderLimit
+                       && settings.FieldHeight <= FieldSizeRenderLimit;
     }
 
     /// <summary>
@@ -38,9 +43,11 @@ internal sealed class App
         foreach (var action in actions)
         {
             actionCount++;
-            var response = _turtleMineFieldController.RunAction(action);
 
-            if (_renderBoard)
+            // If the field is rendered, we must visit all fields to draw the path
+            var response = _turtleMineFieldController.RunAction(action, _renderField);
+
+            if (_renderField)
                 _renderService.RenderMineField(response.Field, response.Turtle);
 
             if (CheckIfGameEnded(response, actionCount))

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TurtleMineField.App;
+using TurtleMineField.App.Configuration;
 using TurtleMineField.App.Exceptions;
 using TurtleMineField.App.Services;
 using TurtleMineField.Core.Configuration;
@@ -14,6 +15,7 @@ using IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddSingleton<ITurtleSettings>(_ => settings);
         services.AddSingleton<IMineFieldSettings>(_ => settings);
+        services.AddSingleton(settings);
 
         services.AddSingleton<IMineFieldRenderService, MineFieldRenderInConsoleService>();
         services.AddSingleton<IInputReadingService, KeyboardInputReadingService>();
