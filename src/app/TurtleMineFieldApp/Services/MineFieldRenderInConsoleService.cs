@@ -53,6 +53,12 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         RenderActionResult("Ooppsss!!! Your turtle left the field, never to return!", ConsoleColor.Red, sequenceCount);
     }
 
+    public void RenderSuccessResult(int sequenceCount)
+    {
+        RenderActionResult("FREEDOM!!! Your turtle found the exit!", ConsoleColor.Cyan, sequenceCount);
+    }
+
+
     public void RenderPrompt()
     {
         var previousColor = Console.ForegroundColor;
@@ -76,11 +82,6 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
         Console.SetCursorPosition(0,0);
     }
 
-    public void RenderSuccessResult(int sequenceCount)
-    {
-        RenderActionResult("FREEDOM!!! Your turtle found the exit!", ConsoleColor.Cyan, sequenceCount);
-    }
-
     private void RenderActionResult(string message, ConsoleColor color, int sequenceCount)
     {
         if(sequenceCount > 0)
@@ -99,6 +100,7 @@ internal sealed class MineFieldRenderInConsoleService : IMineFieldRenderService
 
         var color = previousColor;
         var graphic = Empty;
+
         if (cell is MineCell && isOccupiedCell)
         {
             color = ConsoleColor.Red;

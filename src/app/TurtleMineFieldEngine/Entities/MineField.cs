@@ -21,7 +21,6 @@ internal sealed class MineField : IMineField
 
         _cells = new ICell[height, width];
         _exitCoordinate = exitCoordinate;
-        IsActive = true;
         CoordinatesWithConsequence = new SortedSet<Coordinate>();
 
         InitializeCells();
@@ -30,7 +29,6 @@ internal sealed class MineField : IMineField
     public int Width { get; }
     public int Height { get; }
     public SortedSet<Coordinate> CoordinatesWithConsequence { get; }
-    public bool IsActive { get; set; }
 
     /// <summary>
     /// Scatters mines through the minefield from a list of coordinates.
@@ -41,23 +39,13 @@ internal sealed class MineField : IMineField
     /// <exception cref="CoordinateOutOfBoundsException"></exception>
     public void ScatterMines(List<Coordinate> mineCoordinates)
     {
-        Coordinate currentCoordinate = Coordinate.Origin;
-        try
+        foreach (var mineCoordinate in mineCoordinates)
         {
-            foreach (var mineCoordinate in mineCoordinates)
-            {
-                if (mineCoordinate.Equals(_exitCoordinate))
-                    continue;
+            if (mineCoordinate.Equals(_exitCoordinate))
+                continue;
 
-                currentCoordinate = mineCoordinate;
-                ReplaceCell(mineCoordinate, new MineCell());
-                CoordinatesWithConsequence.Add(mineCoordinate);
-            }
-        }
-        catch (IndexOutOfRangeException)
-        {
-            throw new CoordinateOutOfBoundsException(
-                $"Setting mine to coordinate out of bounds: x = {currentCoordinate.X}; y = {currentCoordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
+            ReplaceCell(mineCoordinate, new MineCell());
+            CoordinatesWithConsequence.Add(mineCoordinate);
         }
     }
 
@@ -96,6 +84,9 @@ internal sealed class MineField : IMineField
 
             ReplaceCell(coordinate1, portal1);
             ReplaceCell(coordinate2, portal2);
+
+            CoordinatesWithConsequence.Add(coordinate1);
+            CoordinatesWithConsequence.Add(coordinate2);
         }
     }
 
@@ -108,20 +99,9 @@ internal sealed class MineField : IMineField
     /// <exception cref="CoordinateOutOfBoundsException"></exception>
     public ICell VisitCell(Coordinate coordinate)
     {
-        if (!IsActive)
-            throw new InvalidMineFieldException("The accessed mine field was not active.");
-
-        try
-        {
-            var visitedCell = GetCell(coordinate);
-            visitedCell.WasVisited = true;
-            return visitedCell;
-        }
-        catch
-        {
-            throw new CoordinateOutOfBoundsException(
-                $"Visiting cell with coordinate out of bounds: x = {coordinate.X}; y = {coordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
-        }
+        var visitedCell = GetCell(coordinate);
+        visitedCell.WasVisited = true;
+        return visitedCell;
     }
 
     /// <summary>
@@ -132,7 +112,15 @@ internal sealed class MineField : IMineField
     /// <returns>Cell</returns>
     public ICell GetCell(Coordinate coordinate)
     {
-        return _cells[coordinate.Y, coordinate.X];
+        try
+        {
+            return _cells[coordinate.Y, coordinate.X];
+        }
+        catch
+        {
+            throw new CoordinateOutOfBoundsException(
+                $"Trying to get cell with coordinate out of bounds: x = {coordinate.X}; y = {coordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
+        }
     }
 
     private void InitializeCells()
@@ -146,21 +134,21 @@ internal sealed class MineField : IMineField
             }
         }
 
-        try
-        {
-            ReplaceCell(_exitCoordinate, new ExitCell());
-            CoordinatesWithConsequence.Add(_exitCoordinate);
-        }
-        catch
-        {
-            throw new CoordinateOutOfBoundsException(
-                $"Setting exit to coordinate out of bounds: x = {_exitCoordinate.X}; y = {_exitCoordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
-        }
+        ReplaceCell(_exitCoordinate, new ExitCell());
+        CoordinatesWithConsequence.Add(_exitCoordinate);
     }
 
     private void ReplaceCell(Coordinate coordinate, ICell newCell)
     {
-        _cells[coordinate.Y, coordinate.X] = newCell;
+        try
+        {
+            _cells[coordinate.Y, coordinate.X] = newCell;
+        }
+        catch
+        {
+            throw new CoordinateOutOfBoundsException(
+                $"Setting cell to coordinate out of bounds: x = {_exitCoordinate.X}; y = {_exitCoordinate.Y}; Field size:  Width = {Width}; Height = {Height}");
+        }
     }
 
     private Coordinate GenerateUniqueMineCoordinate(int height, int width)

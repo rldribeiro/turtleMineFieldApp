@@ -13,7 +13,6 @@ internal sealed class ActionParsingService : IActionParsingService
 
         var trimmedSequence = Regex.Replace(actionSequence, @"\s+", string.Empty);
 
-
         char currentType = trimmedSequence[0];
         int currentTurns = 1;
 

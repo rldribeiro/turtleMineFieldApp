@@ -44,14 +44,15 @@ internal sealed class App
             actionCount++;
 
             // If the field is rendered, we must visit all fields to draw the path
-            var response = _turtleMineFieldController.RunAction(action, _renderField);
+            var result = _turtleMineFieldController.RunAction(action, _renderField);
 
-            if (_renderField)
-                _renderService.RenderMineField(response.Field, response.Turtle);
+            //if (_renderField)
+            _renderService.RenderMineField(result.Field, result.Turtle);
 
-            if (CheckIfGameEnded(response, actionCount))
+            if (CheckIfGameEnded(result, actionCount))
                 return;
         }
+        // We ran out of actions with the turtle still active
         _renderService.RenderLostResult();
     }
 
@@ -85,26 +86,23 @@ internal sealed class App
         }
     }
 
-    private bool CheckIfGameEnded(TurtleActionResult response, int sequenceCount)
+    private bool CheckIfGameEnded(TurtleActionResult result, int sequenceCount)
     {
         // Check Mine hit
-        if (!response.IsFieldActive && response.VisitedCell is MineCell)
+        if (!result.Turtle.IsActive)
         {
-            _renderService.RenderMineHitResult(sequenceCount);
-            return true;
-        }
-
-        // Check Exit reached
-        if (!response.IsFieldActive && response.VisitedCell is ExitCell)
-        {
-            _renderService.RenderSuccessResult(sequenceCount);
-            return true;
-        }
-
-        // Check Turtle Left the field
-        if (response.VisitedCell is OutOfFieldCell)
-        {
-            _renderService.RenderOutOfFieldResult(sequenceCount);
+            switch (result.VisitedCell)
+            {
+                case ExitCell:
+                    _renderService.RenderSuccessResult(sequenceCount);
+                    break;
+                case MineCell:
+                    _renderService.RenderMineHitResult(sequenceCount);
+                    break;
+                case OutOfFieldCell:
+                    _renderService.RenderOutOfFieldResult(sequenceCount);
+                    break;
+            }
             return true;
         }
 

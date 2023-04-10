@@ -23,4 +23,9 @@ public interface ITurtle
     /// Transports the turtle to the destination coordinate
     /// </summary>
     void MoveTo(Coordinate coordinate);
+
+    /// <summary>
+    /// Returns true if Turtle is still active, meaning that a mine or the exit has not been visited.
+    /// </summary>
+    bool IsActive { get; set; }
 }

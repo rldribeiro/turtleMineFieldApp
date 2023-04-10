@@ -7,5 +7,5 @@ public interface ICell
 
 public interface IConsequence<T>
 {
-    void ActUpon(T actedOn);
+    void ActUpon(T turtle);
 }

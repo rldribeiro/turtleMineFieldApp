@@ -11,18 +11,15 @@ public class TurtleActionResult
     /// </summary>
     /// <param name="field"></param>
     /// <param name="visitedCell"></param>
-    /// <param name="isFieldActive"></param>
     /// <param name="turtle"></param>
-    public TurtleActionResult(IMineField field, ICell visitedCell, bool isFieldActive, ITurtle turtle)
+    public TurtleActionResult(IMineField field, ICell visitedCell, ITurtle turtle)
     {
         Field = field;
         VisitedCell = visitedCell;
-        IsFieldActive = isFieldActive;
         Turtle = turtle;
     }
 
     public IMineField Field { get; }
     public ICell VisitedCell { get; }
-    public bool IsFieldActive { get; }
     public ITurtle Turtle { get; }
 }

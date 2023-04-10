@@ -24,22 +24,17 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
         // Checking if Turtle already is in consequence cell
         ICell currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
 
-        if (_mineField.IsActive)
+        switch (action.Type)
         {
-            switch (action.Type)
-            {
-                case ActionType.Move:
-                    currentCell = MoveAndEvaluate(action.Turns, visitAllCells);
-                    break;
-                case ActionType.Rotate:
-                    _turtle.Rotate90(action.Turns);
-                    break;
-            }
+            case ActionType.Move:
+                currentCell = MoveAndEvaluate(action.Turns, visitAllCells);
+                break;
+            case ActionType.Rotate:
+                _turtle.Rotate90(action.Turns);
+                break;
         }
 
-        HandleConsequences(currentCell);
-
-        return new TurtleActionResult(_mineField, currentCell, _mineField.IsActive, _turtle);
+        return new TurtleActionResult(_mineField, currentCell, _turtle);
     }
 
     private ICell MoveAndEvaluate(int actionTurns, bool visitAllCells)
@@ -50,7 +45,9 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
         }
         catch (CoordinateOutOfBoundsException)
         {
-            return new OutOfFieldCell();
+            var outCell = new OutOfFieldCell();
+            outCell.ActUpon(_turtle);
+            return outCell;
         }
     }
 
@@ -69,18 +66,28 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
         // Check consequences in path
         var consequencesInPath = _mineField.CoordinatesWithConsequence.Where(c =>
         {
-            if(_turtle.CurrentDirection.Equals(Direction.North) || _turtle.CurrentDirection.Equals(Direction.South))
-                return c.X == startCoordinate.X && c.Y >= smallY && c.Y <= largeY;
+            if (_turtle.CurrentDirection.Equals(Direction.North) || _turtle.CurrentDirection.Equals(Direction.South))
+                return c.X == startCoordinate.X && c.Y > smallY && c.Y < largeY;
 
-            return c.Y == startCoordinate.Y && c.X >= smallX && c.X <= largeX;
+            return c.Y == startCoordinate.Y && c.X > smallX && c.X < largeX;
         }).ToList();
 
-        if(consequencesInPath.Any())
-            _turtle.MoveTo(consequencesInPath.FirstOrDefault());
+        if (consequencesInPath.Any())
+        {
+            endCoordinate = consequencesInPath.FirstOrDefault();
+            _turtle.MoveTo(endCoordinate);
+        }
 
         // Return visited cell
         var visitedCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
-        return visitedCell;
+        HandleConsequences(visitedCell);
+
+        var remainingMoves = actionTurns - startCoordinate.DetermineLinearDistanceTo(endCoordinate);
+
+        if (!_turtle.IsActive || remainingMoves == 0)
+            return visitedCell;
+
+        return MoveDirectly(remainingMoves);
     }
 
     private ICell MoveIteratively(int actionTurns)
@@ -93,7 +100,7 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
 
             HandleConsequences(currentCell);
 
-            if (!_mineField.IsActive)
+            if (!_turtle.IsActive)
                 break;
         }
 

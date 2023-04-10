@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System.Linq.Expressions;
+using NSubstitute;
 using TurtleMineField.App.Configuration;
 using TurtleMineField.App.Services;
 using TurtleMineField.Core.Controller;
@@ -15,7 +16,8 @@ public class AppTests
     {
         var controller = Substitute.For<ITurtleMineFieldGameController>();
         var turtle = Substitute.For<ITurtle>();
-        var response = new TurtleActionResult(new MineField(1,1, Coordinate.Origin), new EmptyCell(), true, turtle);
+        turtle.IsActive = true;
+        var response = new TurtleActionResult(new MineField(1,1, Coordinate.Origin), new EmptyCell(), turtle);
         controller.RunAction(Arg.Any<TurtleActionRequest>()).ReturnsForAnyArgs(response);
 
         var settings = new GameSettings
@@ -44,7 +46,6 @@ public class AppTests
         var renderService = Substitute.For<IMineFieldRenderService>();
 
         var sut = new App.App(controller, parsingService, renderService, readingService, settings);
-
         sut.RunSequence("sequence");
 
         parsingService.Received(1).ParseActions(Arg.Any<string>());

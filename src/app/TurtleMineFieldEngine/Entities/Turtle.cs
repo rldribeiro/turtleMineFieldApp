@@ -6,10 +6,12 @@ internal sealed class Turtle : ITurtle
     {
         CurrentCoordinate = coordinate;
         CurrentDirection = direction;
+
+        IsActive = true;
     }
 
+    public bool IsActive { get; set; }
     public Direction CurrentDirection { get; private set; }
-
     public Coordinate CurrentCoordinate { get; private set; }
 
     public void Rotate90(int turns, bool clockwise)

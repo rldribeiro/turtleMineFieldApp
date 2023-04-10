@@ -10,11 +10,6 @@ public interface IMineField
     SortedSet<Coordinate> CoordinatesWithConsequence { get; }
 
     /// <summary>
-    /// Returns true if Mine Field is still active, meaning that a mine or the exit has not been visited.
-    /// </summary>
-    bool IsActive { get; set; }
-
-    /// <summary>
     /// Visits and returns a Cell at a given coordinate.
     /// </summary>
     /// <param name="coordinate"></param>
@@ -22,7 +17,7 @@ public interface IMineField
     ICell VisitCell(Coordinate coordinate);
 
     /// <summary>
-    /// Returns a cell of the field at a given X, Y coordinate
+    /// Returns a cell of the field at a given coordinate
     /// </summary>
     ICell GetCell(Coordinate coordinate);
 }

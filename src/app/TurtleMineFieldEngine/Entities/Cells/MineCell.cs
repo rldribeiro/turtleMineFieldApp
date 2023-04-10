@@ -1,11 +1,11 @@
 ﻿namespace TurtleMineField.Core.Entities.Cells;
 
-public sealed class MineCell : ICell, IConsequence<IMineField>
+public sealed class MineCell : ICell, IConsequence<ITurtle>
 {
     public bool WasVisited { get; set; }
 
-    public void ActUpon(IMineField field)
+    public void ActUpon(ITurtle turtle)
     {
-        field.IsActive = false;
+        turtle.IsActive = false;
     }
 }
