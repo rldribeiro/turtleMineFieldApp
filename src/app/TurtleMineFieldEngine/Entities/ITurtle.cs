@@ -17,7 +17,7 @@ public interface ITurtle
     /// Moves the turtle in the direction it is facing.
     /// </summary>
     /// <param name="steps">The number of steps to move</param>
-    void Move(int steps = 1);
+    Coordinate Move(int steps = 1);
 
     /// <summary>
     /// Transports the turtle to the destination coordinate

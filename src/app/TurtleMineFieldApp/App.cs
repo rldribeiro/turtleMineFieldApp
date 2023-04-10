@@ -46,8 +46,8 @@ internal sealed class App
             // If the field is rendered, we must visit all fields to draw the path
             var result = _turtleMineFieldController.RunAction(action, _renderField);
 
-            //if (_renderField)
-            _renderService.RenderMineField(result.Field, result.Turtle);
+            if (_renderField)
+                _renderService.RenderMineField(result.Field, result.Turtle);
 
             if (CheckIfGameEnded(result, actionCount))
                 return;

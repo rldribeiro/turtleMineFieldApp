@@ -20,10 +20,11 @@ internal sealed class Turtle : ITurtle
         CurrentDirection = (Direction)(((int)CurrentDirection + turns * directionMultiplier) % 4);
     }
 
-    public void Move(int steps)
+    public Coordinate Move(int steps)
     {
         var coordUpdate = GenerateCoordinateUpdate(steps);
         CurrentCoordinate = new Coordinate(CurrentCoordinate.X + coordUpdate.X, CurrentCoordinate.Y + coordUpdate.Y);
+        return CurrentCoordinate;
     }
 
     public void MoveTo(Coordinate coordinate)

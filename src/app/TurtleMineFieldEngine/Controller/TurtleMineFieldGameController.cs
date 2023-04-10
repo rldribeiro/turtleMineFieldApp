@@ -55,15 +55,14 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
     {
         // Move turtle to determine end coordinate
         var startCoordinate = _turtle.CurrentCoordinate;
-        _turtle.Move(actionTurns);
-        var endCoordinate = _turtle.CurrentCoordinate;
+        var endCoordinate = _turtle.Move(actionTurns);
 
+        // Check consequences in turtle's path
         var largeX = Math.Max(startCoordinate.X, endCoordinate.X);
         var smallX = Math.Min(startCoordinate.X, endCoordinate.X);
         var largeY = Math.Max(startCoordinate.Y, endCoordinate.Y);
         var smallY = Math.Min(startCoordinate.Y, endCoordinate.Y);
 
-        // Check consequences in path
         var consequencesInPath = _mineField.CoordinatesWithConsequence.Where(c =>
         {
             if (_turtle.CurrentDirection.Equals(Direction.North) || _turtle.CurrentDirection.Equals(Direction.South))
@@ -78,16 +77,16 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
             _turtle.MoveTo(endCoordinate);
         }
 
-        // Return visited cell
         var visitedCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
         HandleConsequences(visitedCell);
 
+        // Determining remaining moves: already done turns minus turns took to reach consequence cell
         var remainingMoves = actionTurns - startCoordinate.DetermineLinearDistanceTo(endCoordinate);
+        if (_turtle.IsActive && remainingMoves > 0)
+            return MoveDirectly(remainingMoves);
 
-        if (!_turtle.IsActive || remainingMoves == 0)
-            return visitedCell;
-
-        return MoveDirectly(remainingMoves);
+        // Turtle is inactive or has no more moves
+        return visitedCell;
     }
 
     private ICell MoveIteratively(int actionTurns)
@@ -95,8 +94,8 @@ internal sealed class TurtleMineFieldGameController : ITurtleMineFieldGameContro
         var currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
         for (int i = 0; i < actionTurns; i++)
         {
-            _turtle.Move();
-            currentCell = _mineField.VisitCell(_turtle.CurrentCoordinate);
+            var currCoordinate = _turtle.Move();
+            currentCell = _mineField.VisitCell(currCoordinate);
 
             HandleConsequences(currentCell);
 
